@@ -22,8 +22,10 @@ module.exports = async (req, res) => {
   let path, pick;
   [qs, path] = take(qs, "relay_path");
   [qs, pick] = take(qs, "relay_pick");
+  let dbg; [qs, dbg] = take(qs, "relay_debug");
   if (path == null) { res.statusCode = 403; return res.end("only /fapi/ paths are allowed"); }
   path = "/fapi/" + path.replace(/^\/+/, "");
+  if (dbg) { res.setHeader("Content-Type", "application/json"); return res.end(JSON.stringify({ 收到的原始地址: req.url, 转给币安的地址: TARGET + path + (qs ? "?" + qs : ""), 中转位置: process.env.VERCEL_REGION || "?" })); }
   const h = { "User-Agent": "Mozilla/5.0 (compatible; relay)", "Accept": "application/json" };
   if (req.headers["x-mbx-apikey"]) h["X-MBX-APIKEY"] = req.headers["x-mbx-apikey"];
   const send = (code, obj) => { res.statusCode = code; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify(obj)); };
