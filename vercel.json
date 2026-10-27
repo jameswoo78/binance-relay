@@ -1,0 +1,4 @@
+{
+  "regions": ["hnd1"],
+  "rewrites": [{ "source": "/fapi/:path*", "destination": "/api/relay?relay_path=:path*" }]
+}
